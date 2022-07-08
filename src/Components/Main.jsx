@@ -15,6 +15,12 @@ export default function Main() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState("");
 
+  const [sanctumUrl, setSanctumUrl] = useState(
+    "http://localhost:8000/sanctum/csrf-cookie"
+  );
+  const [sanctumCredCheck, setSanctumCredCheck] = useState(true);
+  const [sanctumStatus, setSanctumStatus] = useState(false);
+
   const changeMethod = (value) => {
     setMethod(value);
   };
@@ -22,7 +28,12 @@ export default function Main() {
   const changeUrl = async (value) => {
     try {
       setIsLoading(true);
-      const result = await ApiParser(value, method, header, body);
+      const sanctum = {
+        url: sanctumUrl,
+        credCheck: sanctumCredCheck,
+        status: sanctumStatus,
+      };
+      const result = await ApiParser(value, method, header, body, sanctum);
       console.log(result);
       setResult(result);
     } catch (e) {
@@ -50,6 +61,14 @@ export default function Main() {
                 onUrlChange={changeUrl}
                 method={method}
                 onLoad={isLoading}
+                sanctum={{
+                  url: sanctumUrl,
+                  credCheck: sanctumCredCheck,
+                  status: sanctumStatus,
+                  urlHandler: setSanctumUrl,
+                  credCheckHandler: setSanctumCredCheck,
+                  statusHandler: setSanctumStatus,
+                }}
               />
               <CardBody
                 onHeaderChange={changeHeader}

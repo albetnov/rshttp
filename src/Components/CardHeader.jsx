@@ -3,6 +3,7 @@ import { Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import CustomAlert from "./Core/CustomAlert";
 import RequestSelector from "./Headings/RequestSelector";
+import SanctumOptions from "./Headings/SanctumOptions";
 import URLBar from "./Headings/URLBar";
 
 export default function CardHeader({
@@ -10,6 +11,7 @@ export default function CardHeader({
   onUrlChange,
   method,
   onLoad,
+  sanctum,
 }) {
   const [error, setError] = useState("");
 
@@ -25,6 +27,14 @@ export default function CardHeader({
 
   return (
     <Box>
+      <SanctumOptions
+        url={sanctum.url}
+        status={sanctum.status}
+        credCheck={sanctum.credCheck}
+        onUrlChanged={sanctum.urlHandler}
+        onCredCheck={sanctum.credCheckHandler}
+        onStatusChange={sanctum.statusHandler}
+      />
       <Flex
         flexDirection={{ base: "column", md: "row" }}
         alignItems={{ base: "normal", md: "center" }}
