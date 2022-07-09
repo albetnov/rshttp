@@ -15,6 +15,7 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { sanctumAuth } from "../../Utils/ApiInterface";
 
 export default function SanctumOptions({
@@ -25,6 +26,8 @@ export default function SanctumOptions({
   status,
   credCheck,
 }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const RenderBadge = () => {
     if (status) {
       return (
@@ -61,7 +64,32 @@ export default function SanctumOptions({
     onStatusChange((prevValue) => !prevValue);
   };
 
-  const requestCsrf = () => sanctumAuth({ url, credCheck, status });
+  const requestCsrf = async () => {
+    try {
+      setIsLoading(true);
+      await sanctumAuth({ url, credCheck, status });
+      console.log("Cookie secured.");
+    } catch (err) {
+      console.log("Failed to secure cookie: " + err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const AttemptCsrfButton = () => {
+    if (isLoading) {
+      return (
+        <Button colorScheme="blue" isLoading loadingText="Fetching...">
+          Attempt CSRF Token (Single Time)
+        </Button>
+      );
+    }
+    return (
+      <Button colorScheme="blue" onClick={requestCsrf}>
+        Attempt CSRF Token (Single Time)
+      </Button>
+    );
+  };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -97,12 +125,9 @@ export default function SanctumOptions({
                 </Checkbox>
               </FormControl>
               <FormControl mt={3}>
-                <Button colorScheme="blue" onClick={requestCsrf}>
-                  Attempt CSRF Token (Single Time)
-                </Button>
+                <AttemptCsrfButton />
               </FormControl>
             </ModalBody>
-
             <ModalFooter>
               <Button colorScheme="blue" mr={3} onClick={onClose}>
                 Close

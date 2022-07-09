@@ -55,9 +55,9 @@ export default function BodyData({ onChange }) {
       return setError("");
     }
     try {
-      parseString(value);
+      const result = parseString(value);
       setError("");
-      onChange(value);
+      onChange(result);
     } catch (err) {
       if (err instanceof YAMLParseError) {
         setError("Invalid YAML Format");

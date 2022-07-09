@@ -1,17 +1,15 @@
 import axios from "axios";
 
+let client = axios.create();
+
 const sanctumAuth = (sanctum) => {
-  axios
-    .get(sanctum.url, {
-      withCredentials: sanctum.credCheck,
-    })
-    .then((res) => {
-      console.log("Cookie Secured!");
-    })
-    .catch((err) => console.log("Failed to fetch cookie: " + err));
+  client = axios.create({
+    withCredentials: sanctum.credCheck,
+  });
+  return client.get(sanctum.url);
 };
 
-const ApiParser = (url, method, header, body, sanctum) => {
+const ApiParser = async (url, method, header, body, sanctum) => {
   const axiosConfig = {};
 
   if (header) {
@@ -20,23 +18,26 @@ const ApiParser = (url, method, header, body, sanctum) => {
 
   const data = body !== "" ? body : null;
   if (sanctum.status) {
-    axiosConfig.withCresidentials = sanctum.credCheck;
-    sanctumAuth(sanctum);
+    try {
+      await sanctumAuth(sanctum);
+    } catch (err) {
+      console.log("Sanctum auth failed");
+    }
   }
 
   switch (method) {
     case "get":
-      return axios.get(url, axiosConfig);
+      return client.get(url, axiosConfig);
     case "post":
-      return axios.post(url, data, axiosConfig);
+      return client.post(url, data, axiosConfig);
     case "put":
-      return axios.put(url, data, axiosConfig);
+      return client.put(url, data, axiosConfig);
     case "patch":
-      return axios.patch(url, data, axiosConfig);
+      return client.patch(url, data, axiosConfig);
     case "delete":
-      return axios.delete(url, axiosConfig);
+      return client.delete(url, axiosConfig);
     default:
-      return axios;
+      return client;
   }
 };
 
