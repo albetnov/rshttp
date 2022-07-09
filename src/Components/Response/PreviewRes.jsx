@@ -15,7 +15,21 @@ export default function PreviewRes({ result }) {
   );
 
   if (result instanceof AxiosError) {
-    return <CustomAlert msg="Network Error" type="error" />;
+    if (result.code === "ERR_NETWORK") {
+      return <CustomAlert msg="Network Error" type="error" />;
+    } else {
+      return (
+        <>
+          <CustomAlert
+            msg="CORS Problem or Unsuccessful Request. Details available at console."
+            type="warning"
+          />
+          <Text>
+            {result.response?.data?.message || "No response data available."}
+          </Text>
+        </>
+      );
+    }
   }
 
   const setTypeListener = (value) => {
