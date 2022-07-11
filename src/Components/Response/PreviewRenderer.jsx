@@ -7,9 +7,18 @@ export default function PreviewRenderer({ type, result }) {
     return (
       <iframe
         src={result?.request.responseURL}
-        style={{ marginTop: 5, width: "100%" }}
-        title="response"
+        title="Result"
+        style={{
+          border: 0,
+          width: "100%",
+          marginTop: 10,
+          height: 450,
+        }}
       ></iframe>
+    );
+  } else if (type === "json") {
+    return (
+      <Textarea mt={5} value={JSON.stringify(result?.data, null, 2)} readOnly />
     );
   } else if (type === "text") {
     return <Textarea mt={5} value={result?.data} readOnly />;

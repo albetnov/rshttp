@@ -18,6 +18,12 @@ export default function URLBar({ onUrlChange, onError, method, onLoad }) {
 
   const urlChanged = (value) => {
     switch (value.trim()) {
+      case "http":
+        setUrl("http://");
+        break;
+      case "shttp":
+        setUrl("https://");
+        break;
       case "_p":
         setUrl("http://localhost:3000");
         break;

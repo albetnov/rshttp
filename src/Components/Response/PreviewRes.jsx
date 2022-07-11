@@ -8,11 +8,18 @@ import CustomAlert from "../Core/CustomAlert";
 import { AxiosError } from "axios";
 
 export default function PreviewRes({ result }) {
-  const [type, setType] = useState(
-    result?.headers?.["content-type"]?.startsWith("text/html")
-      ? "html"
-      : "text" || ""
-  );
+  const initialType = () => {
+    const contentType = result?.headers["content-type"] || "";
+    if (contentType?.startsWith("text/html")) {
+      return "html";
+    } else if (contentType?.startsWith("application/json")) {
+      return "json";
+    } else {
+      return "text";
+    }
+  };
+
+  const [type, setType] = useState(initialType);
 
   if (result instanceof AxiosError) {
     if (result.code === "ERR_NETWORK") {
@@ -36,6 +43,9 @@ export default function PreviewRes({ result }) {
     switch (value) {
       case "html":
         setType("html");
+        break;
+      case "json":
+        setType("json");
         break;
       case "text":
         setType("text");

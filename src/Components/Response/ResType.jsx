@@ -17,6 +17,7 @@ export default function ResType({ onChange, type }) {
       value={resType}
     >
       <option value="html">text/html</option>
+      <option value="json">application/json</option>
       <option value="text">plain/text</option>
     </Select>
   );
