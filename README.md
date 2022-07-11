@@ -1,6 +1,6 @@
 ## RSHTTP
 
-React Simple HTTP API
+React Simple HTTP API Tester
 
 ## Installation
 

@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 
 export default function PreviewRes({ result }) {
   const initialType = () => {
-    const contentType = result?.headers["content-type"] || "";
+    const contentType = result?.headers?.["content-type"] || "";
     if (contentType?.startsWith("text/html")) {
       return "html";
     } else if (contentType?.startsWith("application/json")) {
